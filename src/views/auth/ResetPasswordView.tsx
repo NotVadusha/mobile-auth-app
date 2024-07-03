@@ -11,40 +11,18 @@ import AuthCard from "../../components/AuthCard";
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   {
     Home: undefined;
-    Login: undefined;
-    ForgotPassword: undefined;
+    Register: undefined;
   },
-  "Login"
+  "Register"
 >;
 
 type Props = {
   navigation: ProfileScreenNavigationProp;
 };
 
-export const LoginView = ({ navigation }: Props) => {
-  const [username, setUsername] = useState("");
+export const ResetPasswordView = ({ navigation }: Props) => {
+  const [initialPassword, setInitialPassword] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleLogin = async () => {
-    try {
-      const response = await axios.post(
-        "http://192.168.0.119:3000/auth/login",
-        {
-          username,
-          password,
-        },
-      );
-      console.log(response);
-      AsyncStorage.setItem("jwtToken", response.data.access_token);
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Home" }],
-      });
-    } catch (error) {
-      console.log(error);
-      console.warn("Fetch error");
-    }
-  };
 
   return (
     <SafeAreaView
@@ -57,38 +35,31 @@ export const LoginView = ({ navigation }: Props) => {
         backgroundColor: "#1268CC",
       }}
     >
-      <AuthCard
-        mainHeaderText="Login"
-        secondaryHeaderText="Welcome back! Please enter your details."
-      >
+      <AuthCard mainHeaderText="Reset password" secondaryHeaderText="">
         <View style={styles.formBody}>
           <View style={styles.inputsBody}>
             <TextInput
-              placeholder="Username"
-              value={username}
-              onValueChange={setUsername}
+              placeholder="Password"
+              value={initialPassword}
+              onValueChange={setInitialPassword}
+              secureTextEntry
             />
             <TextInput
-              placeholder="Password"
+              placeholder="Repeat password"
               value={password}
               onValueChange={setPassword}
               secureTextEntry
             />
           </View>
           <View style={styles.buttonsContainer}>
-            <Button label="Sign in" variant="filled" onPress={handleLogin} />
-            <Button
-              label="Forgot password?"
-              variant="outlined"
-              onPress={() => navigation.navigate("ForgotPassword")}
-            />
+            <Button label="Submit" variant="filled" onPress={() => {}} />
           </View>
         </View>
       </AuthCard>
       <Text style={styles.outCardText}>
-        Don't have an account?{" "}
-        <Link to={"/Register"} style={styles.outCardTextLink}>
-          Sign up for free
+        Already have an account?{" "}
+        <Link to={"/Login"} style={styles.outCardTextLink}>
+          Login
         </Link>
       </Text>
     </SafeAreaView>
@@ -104,6 +75,34 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   outCardTextLink: { color: "white" },
+  cardHeader: {
+    paddingHorizontal: 18,
+    paddingVertical: 24,
+    gap: 18,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+  },
+  card: {
+    marginHorizontal: 24,
+    backgroundColor: "white",
+    borderRadius: 20,
+    shadowRadius: 20,
+    shadowColor: "black",
+    shadowOpacity: 0.25,
+  },
+  cardHeaderNameText: {
+    fontSize: 26,
+    fontWeight: "bold",
+    textAlign: "center",
+    fontFamily: "Catamaran",
+  },
+  cardHeaderBodyText: {
+    fontSize: 14,
+    color: "gray",
+    textAlign: "center",
+    fontFamily: "Noto Sans",
+    fontWeight: "500",
+  },
   formBody: {
     gap: 24,
     paddingHorizontal: 18,
