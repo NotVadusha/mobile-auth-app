@@ -1,11 +1,9 @@
 import { Text, View } from "react-native";
 
-const HomePageView = () => {
+export const HomePageView = () => {
   return (
     <View>
-      <Text>HomePageVoew</Text>
+      <Text>HomePageView</Text>
     </View>
   );
 };
-
-export default HomePageView;
