@@ -82,7 +82,7 @@ export const LoginView = ({ navigation }: Props) => {
       </AuthCard>
       <Text style={styles.outCardText}>
         Don't have an account?{" "}
-        <Link to={"/SignUp"} style={styles.outCardTextLink}>
+        <Link to={"/Register"} style={styles.outCardTextLink}>
           Sign up for free
         </Link>
       </Text>
