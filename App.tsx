@@ -1,21 +1,50 @@
-import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginView from "./src/views/auth/LoginView";
+import { LoginView } from "./src/views/auth/LoginView";
+import { HomePageView } from "./src/views/HomePageView";
+import { SignUpView } from "./src/views/auth/RegisterView";
+import * as SecureStore from "expo-secure-store";
+import { createContext, useEffect, useMemo, useReducer, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
+import { Text, View } from "react-native";
+import { useAuth } from "./src/hooks/useAuth";
 
-export default function App() {
+const queryClient = new QueryClient();
+
+const Wrapper = () => {
   const Stack = createNativeStackNavigator();
 
+  const { userToken } = useAuth();
+  console.log(userToken);
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          component={LoginView}
-          options={{ headerTitle: "Login" }}
-        />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {!userToken ? (
+          <>
+            <Stack.Screen name="Login" component={LoginView} />
+            <Stack.Screen name="SignUp" component={SignUpView} />
+            {/* <Stack.Screen name="ResetPassword" component={} /> */}
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Home" component={HomePageView} />
+            {/* <Stack.Screen name="Profile" component={ProfileScreen} /> */}
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
+  );
+};
+
+export default function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Wrapper />
+    </QueryClientProvider>
   );
 }
