@@ -10,21 +10,18 @@ import AuthCard from "../../components/AuthCard";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   {
-    Home: undefined;
-    Register: undefined;
+    ForgotPassword: undefined;
+    ValidateReset: undefined;
   },
-  "Register"
+  "ForgotPassword"
 >;
 
 type Props = {
   navigation: ProfileScreenNavigationProp;
 };
 
-export const SignUpView = ({ navigation }: Props) => {
-  const [username, setUsername] = useState("");
+export const ForgotPasswordView = ({ navigation }: Props) => {
   const [email, setEmail] = useState("");
-  const [initialPassword, setInitialPassword] = useState("");
-  const [password, setPassword] = useState("");
 
   return (
     <SafeAreaView
@@ -38,62 +35,33 @@ export const SignUpView = ({ navigation }: Props) => {
       }}
     >
       <AuthCard
-        mainHeaderText="Sign up"
-        secondaryHeaderText="Hello there! Let's create your account."
+        mainHeaderText="Forgot password?"
+        secondaryHeaderText="Please, enter email associated with your account."
       >
         <View style={styles.formBody}>
           <View style={styles.inputsBody}>
-            <TextInput
-              placeholder="Username"
-              value={username}
-              onValueChange={setUsername}
-            />
             <TextInput
               placeholder="Email"
               value={email}
               onValueChange={setEmail}
             />
-            <TextInput
-              placeholder="Password"
-              value={initialPassword}
-              onValueChange={setInitialPassword}
-              secureTextEntry
-            />
-            <TextInput
-              placeholder="Repeat password"
-              value={password}
-              onValueChange={setPassword}
-              secureTextEntry
-            />
           </View>
           <View style={styles.buttonsContainer}>
             <Button
-              label="Create account"
+              label="Submit"
               variant="filled"
-              onPress={() => {}}
+              onPress={() => {
+                navigation.navigate("ValidateReset");
+              }}
             />
           </View>
         </View>
       </AuthCard>
-      <Text style={styles.outCardText}>
-        Already have an account?{" "}
-        <Link to={"/Login"} style={styles.outCardTextLink}>
-          Login
-        </Link>
-      </Text>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  outCardText: {
-    fontSize: 14,
-    color: "#D9DFE6",
-    textAlign: "center",
-    fontFamily: "Noto Sans",
-    fontWeight: "500",
-  },
-  outCardTextLink: { color: "white" },
   formBody: {
     gap: 24,
     paddingHorizontal: 18,

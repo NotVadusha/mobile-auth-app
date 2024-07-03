@@ -13,6 +13,9 @@ import {
 } from "@tanstack/react-query";
 import { Text, View } from "react-native";
 import { useAuth } from "./src/hooks/useAuth";
+import { ResetPasswordView } from "./src/views/auth/ResetPasswordView";
+import { ValidatePasswordChangeView } from "./src/views/auth/ValidatePasswordChangeView";
+import { ForgotPasswordView } from "./src/views/auth/ForgotPasswordView";
 
 const queryClient = new QueryClient();
 
@@ -28,7 +31,15 @@ const Wrapper = () => {
           <>
             <Stack.Screen name="Login" component={LoginView} />
             <Stack.Screen name="Register" component={SignUpView} />
-            {/* <Stack.Screen name="ResetPassword" component={} /> */}
+            <Stack.Screen name="ResetPassword" component={ResetPasswordView} />
+            <Stack.Screen
+              name="ValidateReset"
+              component={ValidatePasswordChangeView}
+            />
+            <Stack.Screen
+              name="ForgotPassword"
+              component={ForgotPasswordView}
+            />
           </>
         ) : (
           <>
