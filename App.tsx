@@ -27,7 +27,7 @@ const Wrapper = () => {
         {!userToken ? (
           <>
             <Stack.Screen name="Login" component={LoginView} />
-            <Stack.Screen name="SignUp" component={SignUpView} />
+            <Stack.Screen name="Register" component={SignUpView} />
             {/* <Stack.Screen name="ResetPassword" component={} /> */}
           </>
         ) : (
