@@ -1,12 +1,12 @@
-import { Link } from "@react-navigation/native";
-import { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import axios from "axios";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+import { Link } from "@react-navigation/native";
+import { useForm } from "react-hook-form";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Button from "../../components/Button";
-import TextInput from "../../components/TextInput";
+import { resetPasswordSchema } from "../../utils/validationSchemas/ResetPasswordSchema";
+import ControlledInput from "../../components/FormControl/FormControlTextInput";
 import AuthCard from "../../components/AuthCard";
+import Button from "../../components/Button";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   {
@@ -20,9 +20,18 @@ type Props = {
   navigation: ProfileScreenNavigationProp;
 };
 
+type FormValues = {
+  Password: string;
+  RepeatedPassword: string;
+};
+
 export const ResetPasswordView = ({ navigation }: Props) => {
-  const [initialPassword, setInitialPassword] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<FormValues>({ resolver: yupResolver(resetPasswordSchema) });
 
   return (
     <SafeAreaView
@@ -38,16 +47,20 @@ export const ResetPasswordView = ({ navigation }: Props) => {
       <AuthCard mainHeaderText="Reset password" secondaryHeaderText="">
         <View style={styles.formBody}>
           <View style={styles.inputsBody}>
-            <TextInput
+            <ControlledInput<FormValues>
+              control={control}
+              error={errors.Password}
+              name="Password"
               placeholder="Password"
-              value={initialPassword}
-              onValueChange={setInitialPassword}
+              textContentType="password"
               secureTextEntry
             />
-            <TextInput
-              placeholder="Repeat password"
-              value={password}
-              onValueChange={setPassword}
+            <ControlledInput<FormValues>
+              control={control}
+              error={errors.RepeatedPassword}
+              name="RepeatedPassword"
+              placeholder="Repeat your password"
+              textContentType="password"
               secureTextEntry
             />
           </View>
@@ -56,12 +69,6 @@ export const ResetPasswordView = ({ navigation }: Props) => {
           </View>
         </View>
       </AuthCard>
-      <Text style={styles.outCardText}>
-        Already have an account?{" "}
-        <Link to={"/Login"} style={styles.outCardTextLink}>
-          Login
-        </Link>
-      </Text>
     </SafeAreaView>
   );
 };

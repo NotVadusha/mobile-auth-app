@@ -1,14 +1,12 @@
-import { registerValidationSchema } from "../../utils/validationSchemas/RegisterValidationSchema";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { Link } from "@react-navigation/native";
-import { useState } from "react";
-import TextInput from "../../components/TextInput";
+import { registerValidationSchema } from "../../utils/validationSchemas/RegisterValidationSchema";
+import ControlledInput from "../../components/FormControl/FormControlTextInput";
 import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
 import { useForm } from "react-hook-form";
-import ControlledInput from "../../components/FormControl/FormControlTextInput";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   {
@@ -67,6 +65,7 @@ export const SignUpView = ({ navigation }: Props) => {
               name="Email"
               placeholder="Email"
               textContentType="emailAddress"
+              keyboardType="email-address"
             />
             <ControlledInput<FormValues>
               control={control}
