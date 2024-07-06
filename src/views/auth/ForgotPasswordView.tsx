@@ -1,7 +1,7 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { SafeAreaView, StyleSheet, View } from "react-native";
-import { forgotPasswordSchema } from "../../utils/validationSchemas/ForgotPasswordSchema";
+import { forgotPasswordSchema } from "../../utils/validationSchemas/forgotPasswordSchema";
 import ControlledInput from "../../components/FormControl/FormControlTextInput";
 import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
