@@ -81,6 +81,12 @@ export const LoginView = ({ navigation }: Props) => {
                 render={({ field }) => (
                   <TextInput
                     {...field}
+                    styles={{
+                      input: errors.Username ? styles.formInputError : {},
+                      wrapper: errors.Username
+                        ? styles.formInputErrorWrapper
+                        : {},
+                    }}
                     textContentType="username"
                     placeholder="Username"
                   />
@@ -97,6 +103,12 @@ export const LoginView = ({ navigation }: Props) => {
                 render={({ field }) => (
                   <TextInput
                     {...field}
+                    styles={{
+                      input: errors.Password ? styles.formInputError : {},
+                      wrapper: errors.Password
+                        ? styles.formInputErrorWrapper
+                        : {},
+                    }}
                     textContentType="password"
                     secureTextEntry
                     placeholder="Password"
@@ -144,6 +156,14 @@ const styles = StyleSheet.create({
     color: "red",
     paddingHorizontal: 12,
     paddingTop: 4,
+  },
+  formInputError: {
+    borderColor: "red",
+    borderWidth: 1,
+  },
+  formInputErrorWrapper: {
+    borderColor: "pink",
+    borderWidth: 2,
   },
   outCardTextLink: { color: "white" },
   formBody: {
