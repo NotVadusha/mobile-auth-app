@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { Link } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { resetPasswordSchema } from "../../utils/validationSchemas/ResetPasswordSchema";
+import { resetPasswordSchema } from "../../utils/validationSchemas/resetPasswordSchema";
 import ControlledInput from "../../components/FormControl/FormControlTextInput";
 import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
