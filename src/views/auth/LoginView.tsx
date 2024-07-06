@@ -2,11 +2,11 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import { Controller, useForm } from "react-hook-form";
 import { Link } from "@react-navigation/native";
+import { useForm } from "react-hook-form";
 import { loginValidationSchema } from "../../utils/validationSchemas/loginValidationSchema";
+import ControlledInput from "../../components/FormControl/FormControlTextInput";
 import { login } from "../../services/auth.service";
-import TextInput from "../../components/TextInput";
 import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
 
@@ -65,51 +65,20 @@ export const LoginView = ({ navigation }: Props) => {
       >
         <View style={styles.formBody}>
           <View style={styles.inputsBody}>
-            <View>
-              <Controller
-                control={control}
-                name="Username"
-                render={({ field }) => (
-                  <TextInput
-                    {...field}
-                    styles={{
-                      input: errors.Username ? styles.formInputError : {},
-                      wrapper: errors.Username
-                        ? styles.formInputErrorWrapper
-                        : {},
-                    }}
-                    textContentType="username"
-                    placeholder="Username"
-                  />
-                )}
-              />
-              {errors.Username && (
-                <Text style={styles.formError}>{errors.Username.message}</Text>
-              )}
-            </View>
-            <View>
-              <Controller
-                control={control}
-                name="Password"
-                render={({ field }) => (
-                  <TextInput
-                    {...field}
-                    styles={{
-                      input: errors.Password ? styles.formInputError : {},
-                      wrapper: errors.Password
-                        ? styles.formInputErrorWrapper
-                        : {},
-                    }}
-                    textContentType="password"
-                    secureTextEntry
-                    placeholder="Password"
-                  />
-                )}
-              />
-              {errors.Password && (
-                <Text style={styles.formError}>{errors.Password.message}</Text>
-              )}
-            </View>
+            <ControlledInput<FormValues>
+              control={control}
+              error={errors.Username}
+              name="Username"
+              placeholder="Username"
+            />
+            <ControlledInput<FormValues>
+              control={control}
+              name="Password"
+              error={errors.Password}
+              textContentType="password"
+              secureTextEntry
+              placeholder="Password"
+            />
           </View>
           <View style={styles.buttonsContainer}>
             <Button
@@ -142,19 +111,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Noto Sans",
     fontWeight: "500",
-  },
-  formError: {
-    color: "red",
-    paddingHorizontal: 12,
-    paddingTop: 4,
-  },
-  formInputError: {
-    borderColor: "red",
-    borderWidth: 1,
-  },
-  formInputErrorWrapper: {
-    borderColor: "pink",
-    borderWidth: 2,
   },
   outCardTextLink: { color: "white" },
   formBody: {
