@@ -1,12 +1,11 @@
-import { Link } from "@react-navigation/native";
-import { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import axios from "axios";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Button from "../../components/Button";
-import TextInput from "../../components/TextInput";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+import { SafeAreaView, StyleSheet, View } from "react-native";
+import { forgotPasswordSchema } from "../../utils/validationSchemas/ForgotPasswordSchema";
+import ControlledInput from "../../components/FormControl/FormControlTextInput";
 import AuthCard from "../../components/AuthCard";
+import Button from "../../components/Button";
+import { useForm } from "react-hook-form";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   {
@@ -20,8 +19,17 @@ type Props = {
   navigation: ProfileScreenNavigationProp;
 };
 
+type FormValues = {
+  Email: string;
+};
+
 export const ForgotPasswordView = ({ navigation }: Props) => {
-  const [email, setEmail] = useState("");
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<FormValues>({ resolver: yupResolver(forgotPasswordSchema) });
 
   return (
     <SafeAreaView
@@ -40,10 +48,13 @@ export const ForgotPasswordView = ({ navigation }: Props) => {
       >
         <View style={styles.formBody}>
           <View style={styles.inputsBody}>
-            <TextInput
+            <ControlledInput
+              control={control}
+              error={errors.Email}
+              name="Email"
               placeholder="Email"
-              value={email}
-              onValueChange={setEmail}
+              textContentType="emailAddress"
+              keyboardType="email-address"
             />
           </View>
           <View style={styles.buttonsContainer}>

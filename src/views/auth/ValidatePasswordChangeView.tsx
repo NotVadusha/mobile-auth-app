@@ -43,8 +43,9 @@ export const ValidatePasswordChangeView = ({ navigation }: Props) => {
             <TextInput
               placeholder="Enter code"
               value={code}
+              keyboardType="decimal-pad"
+              textContentType="oneTimeCode"
               onValueChange={setCode}
-              secureTextEntry
             />
             <Text style={styles.outCardText}>
               Didn't get the code?{" "}
