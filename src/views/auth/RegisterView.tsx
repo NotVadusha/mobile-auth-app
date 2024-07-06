@@ -1,12 +1,14 @@
+import { registerValidationSchema } from "../../utils/validationSchemas/RegisterValidationSchema";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { Link } from "@react-navigation/native";
 import { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import axios from "axios";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import AuthCard from "../../components/AuthCard";
+import Button from "../../components/Button";
+import { useForm } from "react-hook-form";
+import ControlledInput from "../../components/FormControl/FormControlTextInput";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   {
@@ -20,11 +22,20 @@ type Props = {
   navigation: ProfileScreenNavigationProp;
 };
 
+type FormValues = {
+  Username: string;
+  Email: string;
+  Password: string;
+  RepeatedPassword: string;
+};
+
 export const SignUpView = ({ navigation }: Props) => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [initialPassword, setInitialPassword] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<FormValues>({ resolver: yupResolver(registerValidationSchema) });
 
   return (
     <SafeAreaView
@@ -43,26 +54,34 @@ export const SignUpView = ({ navigation }: Props) => {
       >
         <View style={styles.formBody}>
           <View style={styles.inputsBody}>
-            <TextInput
+            <ControlledInput<FormValues>
+              control={control}
+              error={errors.Username}
+              name="Username"
               placeholder="Username"
-              value={username}
-              onValueChange={setUsername}
+              textContentType="username"
             />
-            <TextInput
+            <ControlledInput<FormValues>
+              control={control}
+              error={errors.Email}
+              name="Email"
               placeholder="Email"
-              value={email}
-              onValueChange={setEmail}
+              textContentType="emailAddress"
             />
-            <TextInput
+            <ControlledInput<FormValues>
+              control={control}
+              error={errors.Password}
+              name="Password"
               placeholder="Password"
-              value={initialPassword}
-              onValueChange={setInitialPassword}
+              textContentType="password"
               secureTextEntry
             />
-            <TextInput
-              placeholder="Repeat password"
-              value={password}
-              onValueChange={setPassword}
+            <ControlledInput<FormValues>
+              control={control}
+              error={errors.RepeatedPassword}
+              name="RepeatedPassword"
+              placeholder="Repeat your password"
+              textContentType="password"
               secureTextEntry
             />
           </View>
@@ -70,7 +89,9 @@ export const SignUpView = ({ navigation }: Props) => {
             <Button
               label="Create account"
               variant="filled"
-              onPress={() => {}}
+              onPress={() => {
+                console.log(getValues());
+              }}
             />
           </View>
         </View>
@@ -97,10 +118,11 @@ const styles = StyleSheet.create({
   formBody: {
     gap: 24,
     paddingHorizontal: 18,
-    paddingVertical: 24,
+    paddingBottom: 24,
   },
   inputsBody: {
     gap: 26,
+    paddingVertical: 32,
   },
   buttonsContainer: {
     display: "flex",
