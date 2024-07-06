@@ -4,11 +4,11 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "@react-navigation/native";
-import * as yup from "yup";
+import { loginValidationSchema } from "../../utils/validationSchemas/loginValidationSchema";
+import { login } from "../../services/auth.service";
 import TextInput from "../../components/TextInput";
 import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
-import { login } from "../../services/auth.service";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   {
@@ -28,20 +28,13 @@ type FormValues = {
   Password: string;
 };
 
-const schema = yup
-  .object({
-    Username: yup.string().min(3).required(),
-    Password: yup.string().min(8).required(),
-  })
-  .required();
-
 export const LoginView = ({ navigation }: Props) => {
   const {
     control,
     handleSubmit,
     getValues,
     formState: { errors },
-  } = useForm<FormValues>({ resolver: yupResolver(schema) });
+  } = useForm<FormValues>({ resolver: yupResolver(loginValidationSchema) });
 
   const handleLogin = async () => {
     try {
@@ -54,8 +47,6 @@ export const LoginView = ({ navigation }: Props) => {
       console.warn("Fetch error");
     }
   };
-
-  console.log(getValues());
 
   return (
     <SafeAreaView
