@@ -2,7 +2,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { Link } from "@react-navigation/native";
-import { registerValidationSchema } from "../../utils/validationSchemas/RegisterValidationSchema";
+import { registerValidationSchema } from "../../utils/validationSchemas/registerValidationSchema";
 import ControlledInput from "../../components/FormControl/FormControlTextInput";
 import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
