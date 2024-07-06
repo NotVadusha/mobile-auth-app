@@ -4,13 +4,16 @@ import {
   TextInput as ReactNativeTextInput,
   TextInputProps as ReactNativeInputProps,
   View,
+  TextInputFocusEventData,
+  NativeSyntheticEvent,
 } from "react-native";
 
-type TextInputProps = {
-  placeholder: string;
+export type TextInputProps = {
+  placeholder?: string;
   styles?: { wrapper: object; input: object };
-  value: string;
-  onValueChange: Dispatch<SetStateAction<string>>;
+  value?: string;
+  onValueChange?: Dispatch<SetStateAction<string>>;
+  onChange?: (value: string) => void;
 } & ReactNativeInputProps;
 
 const TextInput = ({
@@ -18,10 +21,12 @@ const TextInput = ({
   styles = { input: {}, wrapper: {} },
   value,
   onValueChange,
+  onChange,
   ...rest
 }: TextInputProps) => {
   const setValue = (newValue: string) => {
-    onValueChange(newValue);
+    onValueChange?.(newValue);
+    onChange?.(newValue);
   };
 
   const [focused, setFocused] = useState(false);
@@ -53,13 +58,19 @@ const TextInput = ({
   return (
     <View style={wrapperStyles}>
       <ReactNativeTextInput
+        {...rest}
         style={inputStyles}
         placeholder={placeholder}
         value={value}
         onChangeText={setValue}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        {...rest}
+        onFocus={(e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+          setFocused(true);
+          rest.onFocus?.(e);
+        }}
+        onBlur={(e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+          setFocused(false);
+          rest.onBlur?.(e);
+        }}
       />
     </View>
   );
