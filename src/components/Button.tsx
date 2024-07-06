@@ -32,6 +32,7 @@ const Button = ({ label, styles, variant, ...rest }: ButtonProps) => {
 
   return (
     <Pressable
+      role="button"
       {...rest}
       style={{ ...buttonStyles, ...styles?.button }}
       onPressIn={(e: GestureResponderEvent) => {
