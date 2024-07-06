@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   GestureResponderEvent,
   Pressable,
@@ -18,17 +18,23 @@ type ButtonProps = {
 } & PressableProps;
 
 const Button = ({ label, styles, variant, ...rest }: ButtonProps) => {
-  const buttonStyles =
-    variant === "filled"
-      ? { ...defaultStyles.button, ...defaultStyles.filled }
-      : defaultStyles.button;
+  const [isPressed, setIsPressed] = useState(false);
+  const buttonStyles = useMemo(
+    () =>
+      variant === "filled"
+        ? isPressed
+          ? { ...defaultStyles.button, ...defaultStyles.filledPressed }
+          : { ...defaultStyles.button, ...defaultStyles.filled }
+        : isPressed
+        ? { ...defaultStyles.button, ...defaultStyles.defaultPressed }
+        : defaultStyles.button,
+    [isPressed, styles?.button],
+  );
 
   const labelStyles =
     variant === "filled"
       ? { ...defaultStyles.buttonLabel, ...defaultStyles.filledLabel }
       : defaultStyles.buttonLabel;
-
-  const [isPressed, setIsPressed] = useState(false);
 
   return (
     <Pressable
@@ -55,6 +61,15 @@ const defaultStyles = StyleSheet.create({
     justifyContent: "center",
     padding: 13,
     borderRadius: 14,
+    borderWidth: 3,
+    borderColor: "transparent",
+  },
+  defaultPressed: {
+    borderColor: "#D1E6FF",
+  },
+  filledPressed: {
+    backgroundColor: "#0C4180",
+    borderColor: "#D1E6FF",
   },
   filled: { backgroundColor: "#1B85F3" },
   buttonLabel: { color: "#1B85F3", fontWeight: "500" },
