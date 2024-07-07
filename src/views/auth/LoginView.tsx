@@ -9,13 +9,11 @@ import ControlledInput from "../../components/FormControl/FormControlTextInput";
 import { login } from "../../services/auth.service";
 import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
+import useAuthStore from "../../store/AuthStore";
+import { AuthStackParamList } from "../../router/router.types";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
-  {
-    Home: undefined;
-    Login: undefined;
-    ForgotPassword: undefined;
-  },
+  AuthStackParamList,
   "Login"
 >;
 
@@ -35,13 +33,17 @@ export const LoginView = ({ navigation }: Props) => {
     getValues,
     formState: { errors },
   } = useForm<FormValues>({ resolver: yupResolver(loginValidationSchema) });
+  const { login: loginInStore } = useAuthStore();
 
   const handleLogin = async () => {
     try {
       const { Password: password, Username: username } = getValues();
       const response = await login(username, password);
 
-      response && AsyncStorage.setItem("jwtToken", response.access_token);
+      if (response) {
+        AsyncStorage.setItem("jwtToken", response.access_token);
+        loginInStore(username, response.access_token);
+      }
     } catch (error) {
       console.log(error);
       console.warn("Fetch error");

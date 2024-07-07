@@ -6,12 +6,10 @@ import ControlledInput from "../../components/FormControl/FormControlTextInput";
 import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
 import { useForm } from "react-hook-form";
+import { AuthStackParamList } from "../../router/router.types";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
-  {
-    ForgotPassword: undefined;
-    ValidateReset: undefined;
-  },
+  AuthStackParamList,
   "ForgotPassword"
 >;
 
@@ -62,7 +60,7 @@ export const ForgotPasswordView = ({ navigation }: Props) => {
               label="Submit"
               variant="filled"
               onPress={() => {
-                navigation.navigate("ValidateReset");
+                navigation.navigate("ConfirmResetCode");
               }}
             />
           </View>
