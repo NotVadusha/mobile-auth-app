@@ -7,13 +7,11 @@ import { resetPasswordSchema } from "../../utils/validationSchemas/resetPassword
 import ControlledInput from "../../components/FormControl/FormControlTextInput";
 import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
+import { AuthStackParamList } from "../../router/router.types";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
-  {
-    Home: undefined;
-    Register: undefined;
-  },
-  "Register"
+  AuthStackParamList,
+  "ResetPassword"
 >;
 
 type Props = {

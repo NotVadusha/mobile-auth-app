@@ -7,13 +7,11 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import AuthCard from "../../components/AuthCard";
+import { AuthStackParamList } from "../../router/router.types";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
-  {
-    Home: undefined;
-    Register: undefined;
-  },
-  "Register"
+  AuthStackParamList,
+  "ConfirmResetCode"
 >;
 
 type Props = {

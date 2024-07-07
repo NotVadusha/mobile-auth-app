@@ -22,7 +22,7 @@ const RootStack = () => {
           <Text>loading</Text>
         </View>
       ) : (
-        <SafeAreaView style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
           <Stack.Navigator>
             {access_token ? (
               <Stack.Screen
@@ -38,7 +38,7 @@ const RootStack = () => {
               />
             )}
           </Stack.Navigator>
-        </SafeAreaView>
+        </View>
       )}
     </>
   );

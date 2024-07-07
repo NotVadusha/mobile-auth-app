@@ -7,12 +7,10 @@ import ControlledInput from "../../components/FormControl/FormControlTextInput";
 import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
 import { useForm } from "react-hook-form";
+import { AuthStackParamList } from "../../router/router.types";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
-  {
-    Home: undefined;
-    Register: undefined;
-  },
+  AuthStackParamList,
   "Register"
 >;
 
