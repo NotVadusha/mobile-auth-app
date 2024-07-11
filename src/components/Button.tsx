@@ -40,7 +40,11 @@ const Button = ({ label, styles, variant, ...rest }: ButtonProps) => {
     <Pressable
       role="button"
       {...rest}
-      style={{ ...buttonStyles, ...styles?.button }}
+      style={{
+        ...buttonStyles,
+        ...styles?.button,
+        ...(rest.disabled ? defaultStyles.disabledButton : {}),
+      }}
       onPressIn={(e: GestureResponderEvent) => {
         rest.onPressIn?.(e);
         setIsPressed(true);
@@ -63,6 +67,9 @@ const defaultStyles = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 3,
     borderColor: "transparent",
+  },
+  disabledButton: {
+    backgroundColor: "#0C4180",
   },
   defaultPressed: {
     borderColor: "#D1E6FF",

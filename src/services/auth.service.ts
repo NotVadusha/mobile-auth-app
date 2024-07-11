@@ -18,3 +18,21 @@ export const login = async (username: string, password: string) => {
     return null;
   }
 };
+
+export const register = async (
+  username: string,
+  email: string,
+  password: string,
+) => {
+  try {
+    const response = await authInstance.post<LoginResponse>("/auth/register", {
+      username,
+      email,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

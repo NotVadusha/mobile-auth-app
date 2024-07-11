@@ -8,6 +8,10 @@ import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
 import { useForm } from "react-hook-form";
 import { AuthStackParamList } from "../../router/router.types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import useAuthStore from "../../store/AuthStore";
+import { register } from "../../services/auth.service";
+import { useState } from "react";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -32,6 +36,30 @@ export const SignUpView = ({ navigation }: Props) => {
     getValues,
     formState: { errors },
   } = useForm<FormValues>({ resolver: yupResolver(registerValidationSchema) });
+  const [isFetching, setIsFetching] = useState(false);
+
+  const { login: loginInStore } = useAuthStore();
+
+  const handleRegister = async () => {
+    try {
+      setIsFetching(true);
+      const {
+        Password: password,
+        Email: email,
+        Username: username,
+      } = getValues();
+      const response = await register(username, email, password);
+
+      if (response) {
+        AsyncStorage.setItem("jwtToken", response.access_token);
+        loginInStore(username, response.access_token);
+      }
+      setIsFetching(false);
+    } catch (error) {
+      setIsFetching(false);
+      console.log(error);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -86,9 +114,8 @@ export const SignUpView = ({ navigation }: Props) => {
             <Button
               label="Create account"
               variant="filled"
-              onPress={() => {
-                console.log(getValues());
-              }}
+              disabled={isFetching}
+              onPress={handleSubmit(handleRegister)}
             />
           </View>
         </View>

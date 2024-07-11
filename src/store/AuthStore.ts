@@ -5,7 +5,6 @@ type Store = {
   userName: string | null;
   access_token: string | null;
   isLoading: boolean;
-  isUserLoggedIn: boolean;
   setDetailsFromStore: () => void;
   login: (username: string, access_token: string) => void;
   logout: () => void;
@@ -24,7 +23,6 @@ const useAuthStore = create<Store>((set) => ({
     set({
       access_token,
       userName,
-      isUserLoggedIn: !!access_token && !!userName,
       isLoading: false,
     });
   },
