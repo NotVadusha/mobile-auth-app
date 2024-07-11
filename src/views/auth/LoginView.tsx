@@ -11,6 +11,7 @@ import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
 import useAuthStore from "../../store/AuthStore";
 import { AuthStackParamList } from "../../router/router.types";
+import { useState } from "react";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -34,9 +35,11 @@ export const LoginView = ({ navigation }: Props) => {
     formState: { errors },
   } = useForm<FormValues>({ resolver: yupResolver(loginValidationSchema) });
   const { login: loginInStore } = useAuthStore();
+  const [isFetching, setIsFetching] = useState(false);
 
   const handleLogin = async () => {
     try {
+      setIsFetching(true);
       const { Password: password, Username: username } = getValues();
       const response = await login(username, password);
 
@@ -44,7 +47,9 @@ export const LoginView = ({ navigation }: Props) => {
         AsyncStorage.setItem("jwtToken", response.access_token);
         loginInStore(username, response.access_token);
       }
+      setIsFetching(false);
     } catch (error) {
+      setIsFetching(false);
       console.log(error);
       console.warn("Fetch error");
     }
@@ -86,6 +91,7 @@ export const LoginView = ({ navigation }: Props) => {
             <Button
               label="Sign in"
               variant="filled"
+              disabled={isFetching}
               onPress={handleSubmit(handleLogin)}
             />
             <Button
