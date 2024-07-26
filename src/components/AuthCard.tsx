@@ -12,6 +12,7 @@ type AuthCardProps = {
     cardHeaderBodyText: object;
   };
 };
+
 const AuthCard: FC<AuthCardProps> = ({
   children,
   mainHeaderText,

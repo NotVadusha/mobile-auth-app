@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { forwardRef, Ref, useMemo, useState } from "react";
 import {
+  Button as ReactNativeButton,
   GestureResponderEvent,
   Pressable,
   PressableProps,
@@ -17,7 +18,10 @@ type ButtonProps = {
   onLongPress?: () => void;
 } & PressableProps;
 
-const Button = ({ label, styles, variant, ...rest }: ButtonProps) => {
+const Button = (
+  { label, styles, variant, ...rest }: ButtonProps,
+  ref: Ref<ReactNativeButton>,
+) => {
   const [isPressed, setIsPressed] = useState(false);
   const buttonStyles = useMemo(
     () =>
@@ -83,4 +87,4 @@ const defaultStyles = StyleSheet.create({
   filledLabel: { color: "white" },
 });
 
-export default Button;
+export default forwardRef<ReactNativeButton, ButtonProps>(Button);

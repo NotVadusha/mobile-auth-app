@@ -1,13 +1,17 @@
 import { Link } from "@react-navigation/native";
 import { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import axios from "axios";
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import AuthCard from "../../components/AuthCard";
 import { AuthStackParamList } from "../../router/router.types";
+import { useForm } from "react-hook-form";
+import { validateCodeSchema } from "../../utils/validationSchemas/validateCodeSchema";
+import { receiveMail, validateCode } from "../../services/auth.service";
+import useAuthStore from "../../store/AuthStore";
+import ControlledInput from "../../components/FormControl/FormControlTextInput";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -18,8 +22,66 @@ type Props = {
   navigation: ProfileScreenNavigationProp;
 };
 
+type FormValues = {
+  Code: string;
+};
+
 export const ValidatePasswordChangeView = ({ navigation }: Props) => {
-  const [code, setCode] = useState("");
+  const {
+    control,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<FormValues>({ resolver: yupResolver(validateCodeSchema) });
+  const [isFetching, setIsFetching] = useState(false);
+  const [isLinkBlocked, setIsLinkBlocked] = useState(false);
+  const { getForgotPasswordMail, setForgotPasswordToken } = useAuthStore();
+
+  const handleValidateCode = async () => {
+    try {
+      setIsFetching(true);
+      const { Code: code } = getValues();
+      const email = getForgotPasswordMail();
+
+      if (!email) {
+        navigation.navigate("ForgotPassword");
+        return;
+      }
+
+      const updatePasswordToken = await validateCode(email, Number(code));
+      setForgotPasswordToken(updatePasswordToken?.updatePasswordToken ?? null);
+      setIsFetching(false);
+    } catch (error) {
+      setIsFetching(false);
+      console.log(error);
+      console.warn("Fetch error");
+    }
+  };
+
+  const handleResendMail = async () => {
+    try {
+      setIsLinkBlocked(true);
+      const { getForgotPasswordMail } = useAuthStore();
+      const email = getForgotPasswordMail();
+
+      if (!email) {
+        navigation.navigate("ForgotPassword");
+        return;
+      }
+
+      await receiveMail(email);
+      setTimeout(() => setIsLinkBlocked(false), 60000);
+    } catch (error) {
+      setIsLinkBlocked(false);
+      console.log(error);
+      console.warn("Fetch error");
+    }
+  };
+
+  const onInputChange = () => {
+    const { Code: code } = getValues();
+    if (code.length === 6) handleValidateCode();
+  };
 
   return (
     <SafeAreaView
@@ -38,22 +100,31 @@ export const ValidatePasswordChangeView = ({ navigation }: Props) => {
       >
         <View style={styles.formBody}>
           <View style={styles.inputsBody}>
-            <TextInput
-              placeholder="Enter code"
-              value={code}
+            <ControlledInput
+              control={control}
+              error={errors.Code}
+              name="Code"
               keyboardType="decimal-pad"
               textContentType="oneTimeCode"
-              onValueChange={setCode}
+              placeholder="Enter code"
+              onChange={onInputChange}
             />
             <Text style={styles.outCardText}>
               Didn't get the code?{" "}
-              <Link to={"/Login"} style={styles.outCardTextLink}>
-                Resend code
-              </Link>
+              <Pressable onPress={handleResendMail} disabled={isLinkBlocked}>
+                <Text style={styles.outCardTextLink}>
+                  {isLinkBlocked ? "Resend code" : "Wait before the next try"}
+                </Text>
+              </Pressable>
             </Text>
           </View>
           <View style={styles.buttonsContainer}>
-            <Button label="Submit" variant="filled" onPress={() => {}} />
+            <Button
+              label="Submit"
+              variant="filled"
+              disabled={isFetching}
+              onPress={handleSubmit(handleValidateCode)}
+            />
           </View>
         </View>
       </AuthCard>

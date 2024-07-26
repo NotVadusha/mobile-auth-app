@@ -1,4 +1,11 @@
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import {
+  Dispatch,
+  forwardRef,
+  Ref,
+  SetStateAction,
+  useMemo,
+  useState,
+} from "react";
 import {
   StyleSheet,
   TextInput as ReactNativeTextInput,
@@ -16,14 +23,17 @@ export type TextInputProps = {
   onChange?: (value: string) => void;
 } & ReactNativeInputProps;
 
-const TextInput = ({
-  placeholder,
-  styles = { input: {}, wrapper: {} },
-  value,
-  onValueChange,
-  onChange,
-  ...rest
-}: TextInputProps) => {
+const TextInput = (
+  {
+    placeholder,
+    styles = { input: {}, wrapper: {} },
+    value,
+    onValueChange,
+    onChange,
+    ...rest
+  }: TextInputProps,
+  ref: Ref<ReactNativeTextInput>,
+) => {
   const setValue = (newValue: string) => {
     onValueChange?.(newValue);
     onChange?.(newValue);
@@ -59,6 +69,7 @@ const TextInput = ({
     <View style={wrapperStyles}>
       <ReactNativeTextInput
         {...rest}
+        ref={ref}
         style={inputStyles}
         placeholder={placeholder}
         value={value}
@@ -95,4 +106,4 @@ const defaultStyles = StyleSheet.create({
   },
 });
 
-export default TextInput;
+export default forwardRef<ReactNativeTextInput, TextInputProps>(TextInput);
