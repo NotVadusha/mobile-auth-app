@@ -1,6 +1,7 @@
-import axios from "axios";
-import { LoginResponse, ValidationResponse } from "./types";
+import axios, { AxiosError } from "axios";
+import { CheckingResponse, LoginResponse, ValidationResponse } from "./types";
 import { API_URL } from "@env";
+import Toast from "react-native-toast-message";
 
 const apiInstance = axios.create({
   baseURL: API_URL,
@@ -14,7 +15,14 @@ export const login = async (username: string, password: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    Toast.show({
+      type: "error",
+      text1:
+        error instanceof Error || error instanceof AxiosError
+          ? error.message
+          : "An error occurred",
+    });
     return null;
   }
 };
@@ -32,7 +40,14 @@ export const register = async (
     });
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    Toast.show({
+      type: "error",
+      text1:
+        error instanceof Error || error instanceof AxiosError
+          ? error.message
+          : "An error occurred",
+    });
     return null;
   }
 };
@@ -47,7 +62,14 @@ export const validateCode = async (email: string, otp: number) => {
     );
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    Toast.show({
+      type: "error",
+      text1:
+        error instanceof Error || error instanceof AxiosError
+          ? error.message
+          : "An error occurred",
+    });
     return null;
   }
 };
@@ -57,7 +79,14 @@ export const receiveMail = async (email: string) => {
     const response = await apiInstance.get(`/update-password/${email}`);
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    Toast.show({
+      type: "error",
+      text1:
+        error instanceof Error || error instanceof AxiosError
+          ? error.message
+          : "An error occurred",
+    });
     return null;
   }
 };
@@ -74,7 +103,38 @@ export const updatePassword = async (
     });
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    Toast.show({
+      type: "error",
+      text1:
+        error instanceof Error || error instanceof AxiosError
+          ? error.message
+          : "An error occurred",
+    });
+    return null;
+  }
+};
+
+export const checkEmail = async (email: string) => {
+  try {
+    const response = await apiInstance.get<CheckingResponse>(
+      `/auth/check/email/${email}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const checkName = async (name: string) => {
+  try {
+    const response = await apiInstance.get<CheckingResponse>(
+      `/auth/check/name/${name}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
     return null;
   }
 };

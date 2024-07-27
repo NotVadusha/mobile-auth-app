@@ -6,12 +6,14 @@ import { registerValidationSchema } from "../../utils/validationSchemas/register
 import ControlledInput from "../../components/FormControl/FormControlTextInput";
 import AuthCard from "../../components/AuthCard";
 import Button from "../../components/Button";
-import { useForm } from "react-hook-form";
+import { Form, useForm } from "react-hook-form";
 import { AuthStackParamList } from "../../router/router.types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import useAuthStore from "../../store/AuthStore";
-import { register } from "../../services/auth.service";
+import { checkEmail, checkName, register } from "../../services/auth.service";
 import { useState } from "react";
+import Toast from "react-native-toast-message";
+import { AxiosError } from "axios";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -35,7 +37,12 @@ export const SignUpView = ({ navigation }: Props) => {
     handleSubmit,
     getValues,
     formState: { errors },
-  } = useForm<FormValues>({ resolver: yupResolver(registerValidationSchema) });
+  } = useForm<FormValues>({
+    resolver: async (data, context, options) => {
+      console.log(context);
+      return yupResolver(registerValidationSchema)(data, context, options);
+    },
+  });
   const [isFetching, setIsFetching] = useState(false);
 
   const { login: loginInStore } = useAuthStore();
@@ -43,11 +50,13 @@ export const SignUpView = ({ navigation }: Props) => {
   const handleRegister = async () => {
     try {
       setIsFetching(true);
+
       const {
         Password: password,
         Email: email,
         Username: username,
       } = getValues();
+
       const response = await register(username, email, password);
 
       if (response) {
@@ -58,6 +67,13 @@ export const SignUpView = ({ navigation }: Props) => {
     } catch (error) {
       setIsFetching(false);
       console.log(error);
+      Toast.show({
+        type: "error",
+        text1:
+          error instanceof Error || error instanceof AxiosError
+            ? error.message
+            : "An error occurred",
+      });
     }
   };
 
@@ -88,6 +104,9 @@ export const SignUpView = ({ navigation }: Props) => {
             <ControlledInput<FormValues>
               control={control}
               error={errors.Email}
+              onValueChange={() => {
+                console.log(1);
+              }}
               name="Email"
               placeholder="Email"
               textContentType="emailAddress"

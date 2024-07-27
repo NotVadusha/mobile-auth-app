@@ -5,3 +5,7 @@ export interface LoginResponse {
 export interface ValidationResponse {
   updatePasswordToken: string;
 }
+
+export interface CheckingResponse {
+  isExist: boolean;
+}
