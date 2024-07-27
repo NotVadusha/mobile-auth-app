@@ -12,6 +12,8 @@ import { validateCodeSchema } from "../../utils/validationSchemas/validateCodeSc
 import { receiveMail, validateCode } from "../../services/auth.service";
 import useAuthStore from "../../store/AuthStore";
 import ControlledInput from "../../components/FormControl/FormControlTextInput";
+import Toast from "react-native-toast-message";
+import { AxiosError } from "axios";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -54,7 +56,13 @@ export const ValidatePasswordChangeView = ({ navigation }: Props) => {
     } catch (error) {
       setIsFetching(false);
       console.log(error);
-      console.warn("Fetch error");
+      Toast.show({
+        type: "error",
+        text1:
+          error instanceof Error || error instanceof AxiosError
+            ? error.message
+            : "An error occurred",
+      });
     }
   };
 
@@ -74,7 +82,13 @@ export const ValidatePasswordChangeView = ({ navigation }: Props) => {
     } catch (error) {
       setIsLinkBlocked(false);
       console.log(error);
-      console.warn("Fetch error");
+      Toast.show({
+        type: "error",
+        text1:
+          error instanceof Error || error instanceof AxiosError
+            ? error.message
+            : "An error occurred",
+      });
     }
   };
 

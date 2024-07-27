@@ -2,10 +2,11 @@ import { forwardRef, Ref, useMemo, useState } from "react";
 import {
   Button as ReactNativeButton,
   GestureResponderEvent,
-  Pressable,
   PressableProps,
   StyleSheet,
   Text,
+  Pressable,
+  View,
 } from "react-native";
 
 type ButtonVariants = "outlined" | "filled";
@@ -20,7 +21,7 @@ type ButtonProps = {
 
 const Button = (
   { label, styles, variant, ...rest }: ButtonProps,
-  ref: Ref<ReactNativeButton>,
+  ref: Ref<View>,
 ) => {
   const [isPressed, setIsPressed] = useState(false);
   const buttonStyles = useMemo(
@@ -44,6 +45,7 @@ const Button = (
     <Pressable
       role="button"
       {...rest}
+      ref={ref}
       style={{
         ...buttonStyles,
         ...styles?.button,
@@ -87,4 +89,4 @@ const defaultStyles = StyleSheet.create({
   filledLabel: { color: "white" },
 });
 
-export default forwardRef<ReactNativeButton, ButtonProps>(Button);
+export default forwardRef<View, ButtonProps>(Button);

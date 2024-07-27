@@ -18,6 +18,7 @@ const ControlledInput = <TData extends FieldValues>({
   control,
   name,
   error,
+  onChange,
   ...rest
 }: ControlledInputProps<TData>) => {
   return (

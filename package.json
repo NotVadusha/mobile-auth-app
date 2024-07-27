@@ -23,6 +23,7 @@
     "react-hook-form": "^7.52.1",
     "react-native": "^0.73.2",
     "react-native-dotenv": "^3.4.11",
+    "react-native-toast-message": "^2.2.0",
     "yup": "^1.4.0",
     "zustand": "^4.5.4"
   },

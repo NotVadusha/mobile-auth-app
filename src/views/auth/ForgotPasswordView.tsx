@@ -10,6 +10,8 @@ import { AuthStackParamList } from "../../router/router.types";
 import { useState } from "react";
 import { receiveMail } from "../../services/auth.service";
 import useAuthStore from "../../store/AuthStore";
+import Toast from "react-native-toast-message";
+import { AxiosError } from "axios";
 
 type ProfileScreenNavigationProp = NativeStackNavigationProp<
   AuthStackParamList,
@@ -47,7 +49,13 @@ export const ForgotPasswordView = ({ navigation }: Props) => {
     } catch (error) {
       setIsFetching(false);
       console.log(error);
-      console.warn("Fetch error");
+      Toast.show({
+        type: "error",
+        text1:
+          error instanceof Error || error instanceof AxiosError
+            ? error.message
+            : "An error occurred",
+      });
     }
   };
 
