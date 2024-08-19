@@ -27,5 +27,4 @@ The app is an example and a template of the auth flow built with react native an
 - Create an `.env` file. Example of the configuration can be found in the `.env` file
 - Then, run `npm run start` to start the app locally using the expo go
 
-=======
 ---
