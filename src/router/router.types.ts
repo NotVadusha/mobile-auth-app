@@ -1,4 +1,4 @@
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type HomeStackParamList = {
   Home: undefined;
@@ -17,8 +17,6 @@ export type RootStackParamList = {
   AuthStackScreen: undefined;
 };
 
-export type HomeStackNavigationProp =
-  NativeStackNavigationProp<HomeStackParamList>;
+export type HomeStackNavigationProp = NativeStackNavigationProp<HomeStackParamList>;
 
-export type AuthStackNavigationProp =
-  NativeStackNavigationProp<AuthStackParamList>;
+export type AuthStackNavigationProp = NativeStackNavigationProp<AuthStackParamList>;

@@ -1,62 +1,40 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { create } from "zustand";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { User } from 'firebase/auth';
+import { create } from 'zustand';
 
 type Store = {
-  userName: string | null;
-  access_token: string | null;
+  user: User | null;
   isLoading: boolean;
-  forgotPasswordMail: string | null;
-  forgotPasswordToken: string | null;
   setDetailsFromStore: () => void;
-  login: (username: string, access_token: string) => void;
+  login: (user: User) => void;
   logout: () => void;
-  setForgotPasswordMail: (forgotPasswordMail: string | null) => void;
-  setForgotPasswordToken: (forgotPasswordToken: string | null) => void;
-  getForgotPasswordMail: () => string | null;
-  getForgotPasswordToken: () => string | null;
 };
 
 const useAuthStore = create<Store>((set, get) => ({
-  userName: null,
-  access_token: null,
   isLoading: false,
+  user: null,
   isUserLoggedIn: false,
   forgotPasswordMail: null,
   forgotPasswordToken: null,
 
   setDetailsFromStore: async () => {
     set({ isLoading: true });
-    const access_token = await AsyncStorage.getItem("access_token");
-    const userName = await AsyncStorage.getItem("username");
+    const userString = await AsyncStorage.getItem('user');
+    const user = userString ? JSON.parse(userString) : null;
     set({
-      access_token,
-      userName,
+      user,
       isLoading: false,
     });
   },
-  login: (username, access_token) => {
+  login: (user) => {
     set(() => ({
-      userName: username,
-      access_token,
+      user,
     }));
   },
   logout: () => {
     set({
-      userName: undefined,
-      access_token: undefined,
+      user: undefined,
     });
-  },
-  setForgotPasswordMail: (forgotPasswordMail: string | null) => {
-    set({ forgotPasswordMail });
-  },
-  setForgotPasswordToken: (forgotPasswordToken: string | null) => {
-    set({ forgotPasswordToken });
-  },
-  getForgotPasswordMail: () => {
-    return get().forgotPasswordMail;
-  },
-  getForgotPasswordToken: () => {
-    return get().forgotPasswordToken;
   },
 }));
 

@@ -1,5 +1,5 @@
-import { ExoticComponent, FC } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { FC } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 type AuthCardProps = {
   children: string | JSX.Element | JSX.Element[];
@@ -52,12 +52,12 @@ const AuthCard: FC<AuthCardProps> = ({
 const defaultStyles = StyleSheet.create({
   outCardText: {
     fontSize: 14,
-    color: "#D9DFE6",
-    textAlign: "center",
-    fontFamily: "Noto Sans",
-    fontWeight: "500",
+    color: '#D9DFE6',
+    textAlign: 'center',
+    fontFamily: 'Noto Sans',
+    fontWeight: '500',
   },
-  outCardTextLink: { color: "white" },
+  outCardTextLink: { color: 'white' },
   cardHeader: {
     paddingHorizontal: 18,
     paddingVertical: 24,
@@ -67,24 +67,24 @@ const defaultStyles = StyleSheet.create({
   },
   card: {
     marginHorizontal: 24,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     shadowRadius: 20,
-    shadowColor: "black",
+    shadowColor: 'black',
     shadowOpacity: 0.25,
   },
   cardHeaderNameText: {
     fontSize: 26,
-    fontWeight: "bold",
-    textAlign: "center",
-    fontFamily: "Catamaran",
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontFamily: 'Catamaran',
   },
   cardHeaderBodyText: {
     fontSize: 14,
-    color: "gray",
-    textAlign: "center",
-    fontFamily: "Noto Sans",
-    fontWeight: "500",
+    color: 'gray',
+    textAlign: 'center',
+    fontFamily: 'Noto Sans',
+    fontWeight: '500',
   },
   formBody: {
     gap: 24,
@@ -95,7 +95,7 @@ const defaultStyles = StyleSheet.create({
     gap: 26,
   },
   buttonsContainer: {
-    display: "flex",
+    display: 'flex',
     gap: 8,
   },
 });

@@ -1,19 +1,12 @@
+import { Dispatch, Ref, SetStateAction, forwardRef, useMemo, useState } from 'react';
 import {
-  Dispatch,
-  forwardRef,
-  Ref,
-  SetStateAction,
-  useMemo,
-  useState,
-} from "react";
-import {
-  StyleSheet,
-  TextInput as ReactNativeTextInput,
-  TextInputProps as ReactNativeInputProps,
-  View,
-  TextInputFocusEventData,
   NativeSyntheticEvent,
-} from "react-native";
+  TextInputProps as ReactNativeInputProps,
+  TextInput as ReactNativeTextInput,
+  StyleSheet,
+  TextInputFocusEventData,
+  View,
+} from 'react-native';
 
 export type TextInputProps = {
   placeholder?: string;
@@ -32,7 +25,7 @@ const TextInput = (
     onChange,
     ...rest
   }: TextInputProps,
-  ref: Ref<ReactNativeTextInput>,
+  ref: Ref<ReactNativeTextInput>
 ) => {
   const setValue = (newValue: string) => {
     onValueChange?.(newValue);
@@ -50,7 +43,7 @@ const TextInput = (
             ...styles.input,
           }
         : { ...defaultStyles.textInput, ...styles.input },
-    [focused, styles?.input],
+    [focused, styles?.input]
   );
 
   const wrapperStyles = useMemo(
@@ -62,7 +55,7 @@ const TextInput = (
             ...styles.wrapper,
           }
         : { ...defaultStyles.textInputWrapper, ...styles.wrapper },
-    [focused, styles?.wrapper],
+    [focused, styles?.wrapper]
   );
 
   return (
@@ -92,16 +85,16 @@ const defaultStyles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 12,
     borderRadius: 14,
-    borderColor: "#D9DFE6",
+    borderColor: '#D9DFE6',
     borderWidth: 1,
   },
   focusedInput: {
-    borderColor: "#1B85F3",
+    borderColor: '#1B85F3',
   },
-  textInputWrapperFocused: { borderColor: "#D1E6FF" },
+  textInputWrapperFocused: { borderColor: '#D1E6FF' },
   textInputWrapper: {
     borderRadius: 16,
-    borderColor: "rgba(0,0,0,0)",
+    borderColor: 'rgba(0,0,0,0)',
     borderWidth: 2,
   },
 });

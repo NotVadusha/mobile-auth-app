@@ -1,6 +1,8 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { HomePageView } from "../views/HomePageView";
-import { HomeStackParamList } from "./router.types";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { HomePageView } from 'app/src/views/HomePageView';
+
+import { HomeStackParamList } from './router.types';
 
 const Stack = createNativeStackNavigator<HomeStackParamList>();
 
@@ -11,10 +13,10 @@ const HomeStack = () => {
         options={{
           headerShown: false,
           headerTransparent: true,
-          headerTitle: "",
+          headerTitle: '',
         }}
         component={HomePageView}
-        name={"Home"}
+        name={'Home'}
       />
     </Stack.Navigator>
   );

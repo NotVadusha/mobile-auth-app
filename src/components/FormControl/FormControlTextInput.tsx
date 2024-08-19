@@ -1,12 +1,7 @@
-import {
-  Control,
-  Controller,
-  FieldError,
-  FieldValues,
-  Path,
-} from "react-hook-form";
-import { StyleSheet, Text, View } from "react-native";
-import TextInput, { TextInputProps } from "../TextInput";
+import { Control, Controller, FieldError, FieldValues, Path } from 'react-hook-form';
+import { StyleSheet, Text, View } from 'react-native';
+
+import TextInput, { TextInputProps } from 'app/src/components/TextInput';
 
 type ControlledInputProps<TData extends FieldValues> = {
   control: Control<TData, any>;
@@ -44,16 +39,16 @@ const ControlledInput = <TData extends FieldValues>({
 
 const styles = StyleSheet.create({
   formErrorText: {
-    color: "red",
+    color: 'red',
     paddingHorizontal: 12,
     paddingTop: 4,
   },
   formErrorInput: {
-    borderColor: "red",
+    borderColor: 'red',
     borderWidth: 1,
   },
   formErrorInputWrapper: {
-    borderColor: "pink",
+    borderColor: 'pink',
     borderWidth: 2,
   },
 });

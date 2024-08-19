@@ -1,24 +1,27 @@
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import { Link } from "@react-navigation/native";
-import { registerValidationSchema } from "../../utils/validationSchemas/registerValidationSchema";
-import ControlledInput from "../../components/FormControl/FormControlTextInput";
-import AuthCard from "../../components/AuthCard";
-import Button from "../../components/Button";
-import { Form, useForm } from "react-hook-form";
-import { AuthStackParamList } from "../../router/router.types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import useAuthStore from "../../store/AuthStore";
-import { checkEmail, checkName, register } from "../../services/auth.service";
-import { useState } from "react";
-import Toast from "react-native-toast-message";
-import { AxiosError } from "axios";
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+import { Link } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AxiosError } from 'axios';
+import { FirebaseError } from 'firebase/app';
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  updateProfile,
+} from 'firebase/auth';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 
-type ProfileScreenNavigationProp = NativeStackNavigationProp<
-  AuthStackParamList,
-  "Register"
->;
+import { app, getAuth } from 'app/firebase.config';
+import AuthCard from 'app/src/components/AuthCard';
+import Button from 'app/src/components/Button';
+import ControlledInput from 'app/src/components/FormControl/FormControlTextInput';
+import { AuthStackParamList } from 'app/src/router/router.types';
+import useAuthStore from 'app/src/store/AuthStore';
+import { registerValidationSchema } from 'app/src/utils/validationSchemas/registerValidationSchema';
+
+type ProfileScreenNavigationProp = NativeStackNavigationProp<AuthStackParamList, 'Register'>;
 
 type Props = {
   navigation: ProfileScreenNavigationProp;
@@ -31,6 +34,7 @@ type FormValues = {
   RepeatedPassword: string;
 };
 
+const auth = getAuth(app);
 export const SignUpView = ({ navigation }: Props) => {
   const {
     control,
@@ -45,34 +49,34 @@ export const SignUpView = ({ navigation }: Props) => {
   });
   const [isFetching, setIsFetching] = useState(false);
 
-  const { login: loginInStore } = useAuthStore();
+  const { login } = useAuthStore();
 
   const handleRegister = async () => {
     try {
       setIsFetching(true);
 
-      const {
-        Password: password,
-        Email: email,
-        Username: username,
-      } = getValues();
+      const { Password: password, Email: email, Username: username } = getValues();
 
-      const response = await register(username, email, password);
+      const response = await createUserWithEmailAndPassword(auth, email, password);
+
+      console.log(response);
+
+      updateProfile(response.user, { displayName: username });
+
+      sendEmailVerification(response.user);
 
       if (response) {
-        AsyncStorage.setItem("jwtToken", response.access_token);
-        loginInStore(username, response.access_token);
+        login(response.user);
       }
       setIsFetching(false);
     } catch (error) {
       setIsFetching(false);
-      console.log(error);
       Toast.show({
-        type: "error",
+        type: 'error',
         text1:
-          error instanceof Error || error instanceof AxiosError
+          error instanceof Error || error instanceof AxiosError || error instanceof FirebaseError
             ? error.message
-            : "An error occurred",
+            : 'An error occurred',
       });
     }
   };
@@ -81,11 +85,11 @@ export const SignUpView = ({ navigation }: Props) => {
     <SafeAreaView
       style={{
         gap: 32,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        minHeight: "100%",
-        backgroundColor: "#1268CC",
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        minHeight: '100%',
+        backgroundColor: '#1268CC',
       }}
     >
       <AuthCard
@@ -104,9 +108,6 @@ export const SignUpView = ({ navigation }: Props) => {
             <ControlledInput<FormValues>
               control={control}
               error={errors.Email}
-              onValueChange={() => {
-                console.log(1);
-              }}
               name="Email"
               placeholder="Email"
               textContentType="emailAddress"
@@ -140,8 +141,8 @@ export const SignUpView = ({ navigation }: Props) => {
         </View>
       </AuthCard>
       <Text style={styles.outCardText}>
-        Already have an account?{" "}
-        <Link to={"/Login"} style={styles.outCardTextLink}>
+        Already have an account?{' '}
+        <Link to={'/Login'} style={styles.outCardTextLink}>
           Login
         </Link>
       </Text>
@@ -152,12 +153,12 @@ export const SignUpView = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
   outCardText: {
     fontSize: 14,
-    color: "#D9DFE6",
-    textAlign: "center",
-    fontFamily: "Noto Sans",
-    fontWeight: "500",
+    color: '#D9DFE6',
+    textAlign: 'center',
+    fontFamily: 'Noto Sans',
+    fontWeight: '500',
   },
-  outCardTextLink: { color: "white" },
+  outCardTextLink: { color: 'white' },
   formBody: {
     gap: 24,
     paddingHorizontal: 18,
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     paddingVertical: 32,
   },
   buttonsContainer: {
-    display: "flex",
+    display: 'flex',
     gap: 8,
   },
 });

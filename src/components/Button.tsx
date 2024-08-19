@@ -1,15 +1,15 @@
-import { forwardRef, Ref, useMemo, useState } from "react";
+import { Ref, forwardRef, useMemo, useState } from 'react';
 import {
-  Button as ReactNativeButton,
   GestureResponderEvent,
+  Pressable,
   PressableProps,
+  Button as ReactNativeButton,
   StyleSheet,
   Text,
-  Pressable,
   View,
-} from "react-native";
+} from 'react-native';
 
-type ButtonVariants = "outlined" | "filled";
+type ButtonVariants = 'outlined' | 'filled';
 
 type ButtonProps = {
   label: string;
@@ -19,25 +19,22 @@ type ButtonProps = {
   onLongPress?: () => void;
 } & PressableProps;
 
-const Button = (
-  { label, styles, variant, ...rest }: ButtonProps,
-  ref: Ref<View>,
-) => {
+const Button = ({ label, styles, variant, ...rest }: ButtonProps, ref: Ref<View>) => {
   const [isPressed, setIsPressed] = useState(false);
   const buttonStyles = useMemo(
     () =>
-      variant === "filled"
+      variant === 'filled'
         ? isPressed
           ? { ...defaultStyles.button, ...defaultStyles.filledPressed }
           : { ...defaultStyles.button, ...defaultStyles.filled }
         : isPressed
-        ? { ...defaultStyles.button, ...defaultStyles.defaultPressed }
-        : defaultStyles.button,
-    [isPressed, styles?.button],
+          ? { ...defaultStyles.button, ...defaultStyles.defaultPressed }
+          : defaultStyles.button,
+    [isPressed, styles?.button]
   );
 
   const labelStyles =
-    variant === "filled"
+    variant === 'filled'
       ? { ...defaultStyles.buttonLabel, ...defaultStyles.filledLabel }
       : defaultStyles.buttonLabel;
 
@@ -67,26 +64,26 @@ const Button = (
 
 const defaultStyles = StyleSheet.create({
   button: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 13,
     borderRadius: 14,
     borderWidth: 3,
-    borderColor: "transparent",
+    borderColor: 'transparent',
   },
   disabledButton: {
-    backgroundColor: "#0C4180",
+    backgroundColor: '#0C4180',
   },
   defaultPressed: {
-    borderColor: "#D1E6FF",
+    borderColor: '#D1E6FF',
   },
   filledPressed: {
-    backgroundColor: "#0C4180",
-    borderColor: "#D1E6FF",
+    backgroundColor: '#0C4180',
+    borderColor: '#D1E6FF',
   },
-  filled: { backgroundColor: "#1B85F3" },
-  buttonLabel: { color: "#1B85F3", fontWeight: "500" },
-  filledLabel: { color: "white" },
+  filled: { backgroundColor: '#1B85F3' },
+  buttonLabel: { color: '#1B85F3', fontWeight: '500' },
+  filledLabel: { color: 'white' },
 });
 
 export default forwardRef<View, ButtonProps>(Button);

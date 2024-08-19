@@ -1,15 +1,17 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useEffect } from "react";
-import { SafeAreaView, Text, View } from "react-native";
-import { RootStackParamList } from "./router.types";
-import AuthStack from "./AuthStack";
-import HomeStack from "./HomeStack";
-import useAuthStore from "../store/AuthStore";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useEffect } from 'react';
+import { Text, View } from 'react-native';
+
+import useAuthStore from 'app/src/store/AuthStore';
+
+import AuthStack from './AuthStack';
+import HomeStack from './HomeStack';
+import { RootStackParamList } from './router.types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStack = () => {
-  const { access_token, isLoading, setDetailsFromStore } = useAuthStore();
+  const { user, isLoading, setDetailsFromStore } = useAuthStore();
 
   useEffect(() => {
     setDetailsFromStore();
@@ -24,16 +26,16 @@ const RootStack = () => {
       ) : (
         <View style={{ flex: 1 }}>
           <Stack.Navigator>
-            {access_token ? (
+            {user ? (
               <Stack.Screen
                 options={{ headerShown: false }}
-                name={"HomeStackScreen"}
+                name={'HomeStackScreen'}
                 component={HomeStack}
               />
             ) : (
               <Stack.Screen
                 options={{ headerShown: false, headerTransparent: true }}
-                name={"AuthStackScreen"}
+                name={'AuthStackScreen'}
                 component={AuthStack}
               />
             )}
